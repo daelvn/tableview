@@ -17,6 +17,12 @@ You can install `tableview` via LuaRocks:
 $ luarocks install tableview
 ```
 
+## Usage
+
+The module returns a table that contains a single function: `generate`. It takes a table and returns an HTML string.
+
+You can also use the CLI utility that reads a Lua table from STDIN and outputs the HTML (installed as `tableview`).
+
 ## License
 
 This project is Unlicensed.
