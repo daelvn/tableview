@@ -1,0 +1,20 @@
+package: tableview
+source:
+  url: git://github.com/daelvn/tableview.git
+description:
+  summary: Navigate highlighted Lua tables as a HTML page.
+  detailed: >
+    tableview uses several dependencies to get a serialized table,
+    add collapsible elements and highlighting to it.
+  homepage: https://github.com/daelvn/tableview
+dependencies:
+  - lua >= 5.1
+build:
+  type: builtin
+  modules:
+    tableview: tableview.lua
+  install:
+    bin:
+      tableview: bin/tableview.lua
+    lua:
+      tableview.template: template.moonxml

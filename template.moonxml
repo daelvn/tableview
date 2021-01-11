@@ -1,0 +1,135 @@
+tbl, inspect = ...
+
+ROOT = ->
+-- dump = (iskey) =>
+--   switch type @
+--     when "table"
+--       if iskey
+--         div class: "kv", ->
+--           span "["
+--           span class: "code-#{type @}", inspect @
+--           span "]:"
+--       else
+--         details class: "kv", ->
+--           summary ->
+--             len = 0
+--             for k, v in pairs @ do len += 1
+--             span class: "summary", "Table (#{len})"
+--             span class: "object", tostring @
+--           for k, v in pairs @
+--             div class: "pair", ->
+--               dump k, true
+--               dump v, false
+--     else
+--       if iskey
+--         div class: "kv", ->
+--           span "["
+--           span class: "code-#{type @}", inspect @
+--           span "]:"
+--       else
+--         div class: "kv code-#{type @}", inspect @
+dump = (k=ROOT, v) ->
+  -- handle the key first
+  div class: "pair", ->
+    div class: "kv value", ->
+      switch type v
+        when "table"
+          details ->
+            summary ->
+              if k != ROOT
+                div class: "kv key", ->
+                  span "["
+                  span class: "code-#{type k}", inspect k
+                  span "] ="
+              len = 0
+              for kk, vv in pairs v do len += 1
+              span class: "summary", "Table (#{len})"
+              span class: "object", tostring v
+            for kk, vv in pairs v
+              dump kk, vv
+        else
+          if k != ROOT
+            div class: "kv key", ->
+              span "["
+              span class: "code-#{type k}", inspect k
+              span "] ="
+          div class: "kv code-#{type v}", inspect v
+
+print "<!doctype html>"
+html ->
+  head ->
+    style -> print [[
+      details > *:not(summary) {
+        padding-left: 2em;
+      }
+  
+      #main {
+        font-family: Fira Code, 'Courier New', Courier, monospace;
+      }
+            
+      span.object {
+        color: #aaa;
+        font-size: 0.7em;
+      }
+  
+      div.pair {
+        margin: 0.5em;
+        display: flex;
+      }
+  
+      div.kv {
+        display: inline-block;
+        width: max-content;
+      }
+  
+      details,
+      details[open],
+      details:focus {
+        outline: 0;
+        outline-color: #fff;
+      }
+  
+      .code-string {
+        color: green;
+      }
+  
+      .code-number {
+        color: purple;
+      }
+  
+      .code-boolean {
+        color: gold;
+      }
+  
+      .code-function {
+        color: blue;
+      }
+  
+      .code-table {
+        color: brown;
+      }
+
+      details > summary {
+        list-style: none;
+      }
+      details > summary::-webkit-details-marker {
+        display: none;
+      }
+      details > summary::after {
+        content: "\25BC";
+        display: inline-block;
+        transform: rotate(-90deg);
+      }
+      
+      details[open] > summary::after {
+        transform: none;
+      }
+      
+      :focus {
+        outline: none;
+      }
+    ]]
+  body ->
+    div id: "main", ->
+      -- dump tbl
+      dump ROOT, tbl
