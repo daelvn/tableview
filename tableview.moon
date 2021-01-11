@@ -1,10 +1,11 @@
 mxml    = require "moonxml"
-loadkit = require "loadkit" 
+loadkit = require "loadkit"
+inspect = require "inspect"
 
-moonxmlFind = loadkit.make_loader "moonxml"
+moonxmlFind = loadkit.make_loader "lua"
 
 generate = (tbl) ->
-  template = mxml.html\loadmoonfile moonxmlFind "tableview.template"
-  return template tbl
+  template = mxml.html\loadluafile moonxmlFind "tableview.template"
+  return template tbl, inspect
 
 { :generate }

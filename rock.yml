@@ -9,6 +9,9 @@ description:
   homepage: https://github.com/daelvn/tableview
 dependencies:
   - lua >= 5.1
+  - inspect
+  - moonxml
+  - loadkit
 build:
   type: builtin
   modules:
@@ -17,4 +20,4 @@ build:
     bin:
       tableview: bin/tableview.lua
     lua:
-      tableview.template: template.moonxml
+      tableview.template: template.moonxml.lua
