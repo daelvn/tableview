@@ -1,6 +1,17 @@
 local tbl, inspect = ...
 local ROOT
 ROOT = function() end
+local stack = {
+  push = table.insert,
+  pop = table.remove,
+  find = function(self, target)
+    for index, item in ipairs(self) do
+      if item == target then
+        return index
+      end
+    end
+  end
+}
 local dump
 dump = function(k, v)
   if k == nil then
@@ -24,7 +35,7 @@ dump = function(k, v)
                 span({
                   class = "code-" .. tostring(type(k))
                 }, inspect(k))
-                return span("] =")
+                return span("] = ")
               end)
             end
             local len = 0
@@ -38,8 +49,14 @@ dump = function(k, v)
               class = "object"
             }, tostring(v))
           end)
-          for kk, vv in pairs(v) do
-            dump(kk, vv)
+          if stack:find(v) then
+            return b("(Recursion)")
+          else
+            stack:push(v)
+            for kk, vv in pairs(v) do
+              dump(kk, vv)
+            end
+            return stack:pop()
           end
         end)
       else
@@ -51,7 +68,7 @@ dump = function(k, v)
             span({
               class = "code-" .. tostring(type(k))
             }, inspect(k))
-            return span("] =")
+            return span("] = ")
           end)
         end
         return div({
@@ -84,7 +101,7 @@ return html(function()
       }
   
       div.kv {
-        display: inline-block;
+        display: inline;
         width: max-content;
       }
   
@@ -125,6 +142,7 @@ return html(function()
         content: "\25BC";
         display: inline-block;
         transform: rotate(-90deg);
+        margin-left: .6em;
       }
       
       details[open] > summary::after {
