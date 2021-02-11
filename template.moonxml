@@ -30,7 +30,7 @@ ROOT = ->
 --         div class: "kv code-#{type @}", inspect @
 stack = {
   push: table.insert
-  pop: table.remove
+  pop:  table.remove
   find: (target) => for index, item in ipairs @
     return index if item == target
 }
