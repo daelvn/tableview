@@ -51,13 +51,13 @@ dump = (k=ROOT, v) ->
               for kk, vv in pairs v do len += 1
               span class: "summary", "Table (#{len})"
               span class: "object", tostring v
-            if stack\find(v)
+            if stack\find v
               b "(Recursion)"
             else
-              stack\push(v)
+              stack\push v
               for kk, vv in pairs v
                 dump kk, vv
-              stack\pop()
+              stack\pop!
         else
           if k != ROOT
             div class: "kv key", ->
