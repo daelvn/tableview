@@ -28,6 +28,12 @@ ROOT = ->
 --           span "]:"
 --       else
 --         div class: "kv code-#{type @}", inspect @
+stack = {
+  push: table.insert
+  pop:  table.remove
+  find: (target) => for index, item in ipairs @
+    return index if item == target
+}
 dump = (k=ROOT, v) ->
   -- handle the key first
   div class: "pair", ->
@@ -40,19 +46,24 @@ dump = (k=ROOT, v) ->
                 div class: "kv key", ->
                   span "["
                   span class: "code-#{type k}", inspect k
-                  span "] ="
+                  span "] = "
               len = 0
               for kk, vv in pairs v do len += 1
               span class: "summary", "Table (#{len})"
               span class: "object", tostring v
-            for kk, vv in pairs v
-              dump kk, vv
+            if stack\find v
+              b "(Recursion)"
+            else
+              stack\push v
+              for kk, vv in pairs v
+                dump kk, vv
+              stack\pop!
         else
           if k != ROOT
             div class: "kv key", ->
               span "["
               span class: "code-#{type k}", inspect k
-              span "] ="
+              span "] = "
           div class: "kv code-#{type v}", inspect v
 
 print "<!doctype html>"
@@ -78,7 +89,7 @@ html ->
       }
   
       div.kv {
-        display: inline-block;
+        display: inline;
         width: max-content;
       }
   
@@ -119,6 +130,7 @@ html ->
         content: "\25BC";
         display: inline-block;
         transform: rotate(-90deg);
+        margin-left: .6em;
       }
       
       details[open] > summary::after {
