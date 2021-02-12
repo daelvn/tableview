@@ -62,15 +62,15 @@ dump = function(k, v)
             end
             table.sort(tpairs, function(a, b)
               a, b = a[1], b[1]
-              if type(a < type(b)) then
+              if (type(a)) < (type(b)) then
                 return true
-              elseif type(a > type(b)) then
+              elseif (type(a)) > (type(b)) then
                 return false
               else
-                if type(a == "number") then
+                if (type(a)) == "number" then
                   return a < b
                 else
-                  return tostring(a < tostring(b))
+                  return (tostring(a)) < (tostring(b))
                 end
               end
             end)

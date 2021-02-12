@@ -60,15 +60,15 @@ dump = (k=ROOT, v) ->
                 table.insert tpairs, { kk, vv }
               table.sort tpairs, (a, b) ->
                 a,b = a[1], b[1]
-                if type a < type b then
+                if (type a) < (type b) then
                   return true
-                elseif type a > type b then
+                elseif (type a) > (type b) then
                   return false
                 else
-                  if type a == "number"
+                  if (type a) == "number"
                     return a < b
                   else
-                    return tostring a < tostring b
+                    return (tostring a) < (tostring b)
               for idx, pair in ipairs tpairs
                 dump pair[1], pair[2]
               stack\pop!
