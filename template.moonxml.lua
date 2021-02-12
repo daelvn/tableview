@@ -53,8 +53,29 @@ dump = function(k, v)
             return b("(Recursion)")
           else
             stack:push(v)
+            local tpairs = { }
             for kk, vv in pairs(v) do
-              dump(kk, vv)
+              table.insert(tpairs, {
+                kk,
+                vv
+              })
+            end
+            table.sort(tpairs, function(a, b)
+              a, b = a[1], b[1]
+              if (type(a)) < (type(b)) then
+                return true
+              elseif (type(a)) > (type(b)) then
+                return false
+              else
+                if (type(a)) == "number" then
+                  return a < b
+                else
+                  return (tostring(a)) < (tostring(b))
+                end
+              end
+            end)
+            for idx, pair in ipairs(tpairs) do
+              dump(pair[1], pair[2])
             end
             return stack:pop()
           end
